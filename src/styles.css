@@ -1,0 +1,18 @@
+body{
+    padding: 0px;
+    margin: 0px;
+    background-image: url('./img/bg1.jpg');
+    background-size: cover;
+}
+.siteName{
+    background-image: linear-gradient(to right, #3240ac,#3d40aa);
+    font-size: 60px;
+    text-align: center;
+    padding: 40px;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow:
+        0px -5px 5px -6px #000, 
+        0px 5px 5px -6px #000;
+   
+}
