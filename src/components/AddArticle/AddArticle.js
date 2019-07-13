@@ -49,7 +49,6 @@ function AddArticle(props) {
   function submit(){
     props.addArticle(state);
     const tags = state.tags.split(',');
-    console.log(state.id);
     tags.map((item)=>{
       return props.addTag({name:item})
     });  

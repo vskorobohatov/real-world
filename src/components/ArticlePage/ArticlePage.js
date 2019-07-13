@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(1),
       },
       button:{
-        width:"100%",
         height:"100%"
       },
       tag:{
@@ -27,7 +26,12 @@ const useStyles = makeStyles(theme => ({
         fontSize: "13px"
       },
       links:{
-        textDecoration:"none"
+        textDecoration:"none",
+        position:"relative",
+        right:"0"
+      },
+      divider:{
+        marginBottom:"10px"
       }
 }));
 
@@ -36,7 +40,7 @@ function ArticlePage(props) {
     const article = props.articles.find(item => item.id === parseInt(props.match.params.id));
     const isLogged = props.isLogged;
     return (
-        <Container>
+        <Container maxwidth="lg">
             <Paper className={classes.root}>
                 <Typography variant="h5" component="h3">
                     {article.title}
@@ -44,18 +48,19 @@ function ArticlePage(props) {
                 <Typography component="p">
                     {article.body}
                 </Typography>
-                <Divider/>
+                <Divider className={classes.divider}/>
                 <Grid container>
-                  <Grid item xs={11}>
-                  <Typography component="p" className={classes.tag}>
-                    {article.tags}
-                  </Typography>
-                </Grid>  
-                  <Grid item xs={1}>
+                  <Grid item xs={10} sm={10} md={10} lg={11} xl={11}>
+                    <Typography component="p" className={classes.tag}>
+                      {article.tags}
+                    </Typography>
+                  </Grid>  
+                  <Grid item xs={2} sm={2} md={2} lg={1} xl={1}>
                   {isLogged ?(
-                    <Link to="/" className={classes.links} >
-                      <Button variant="outlined" className={classes.button} onClick={event => props.deleteArticle(article.id)}>Delete</Button>
-                    </Link>):(<></>)
+                    <Link to="/" className={classes.links}>
+                      <Button variant="outlined" fullWidth className={classes.button} color="secondary" onClick={event => props.deleteArticle(article.id)}>Delete</Button>
+                    </Link>
+                    ):(<></>)
                   }
                   </Grid>
                 </Grid>

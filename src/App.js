@@ -10,6 +10,7 @@ import Registration from './components/Register/Register'
 import AddArticle from './components/AddArticle/AddArticle';
 import ArticlePage from './components/ArticlePage/ArticlePage';
 import './styles.css'
+import Background from './img/bg.jpg';
 import Container  from '@material-ui/core/Container';
 
 
@@ -20,8 +21,18 @@ const useStyles = makeStyles(theme => ({
     paddingBottom:"25px",
     minHeight:"85vh",
     borderRadius:"10px",
-    marginBottom:"20px"
+    marginBottom:"20px",
+    boxShadow:'0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);'
   },
+  title:{
+    backgroundImage: `url(${Background})`,
+    backgroundSize:"cover",
+    fontSize:"60px",
+    textAlign:"center",
+    padding:"40px",
+    color:"white",
+    marginBottom: theme.spacing(2)
+  }
 }));
 
 
@@ -32,7 +43,7 @@ function App() {
       <Router history={history}>
         <Container className={classes.container}>
           <Header/>
-          <div className="siteName">Real world</div>
+          <div className={classes.title}>Real world</div>
           <Switch>
             <Route exact path='/' component={Home}/>
             <Route path='/login' component={Login}/>

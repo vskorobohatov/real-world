@@ -54,11 +54,11 @@ function Home(props) {
           ):(
             <></>
           )}
-        <Grid container spacing={3}>
-          <Grid item xs={10}>
+        <Grid container maxwidth="lg" spacing={3}>
+          <Grid item xs={12} sm={9} md={10} lg={10} xl={10}>
             {ArticlesList}
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={12} sm={3} md={2} lg={2} xl={2}>
             <h3 className={classes.tagTitle}>Popular tags:</h3>
               {TagsList} 
             <Button color="secondary" onClick={event => setActiveTag("")}>Reset</Button>

@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
     fontSize: "13px"
   },
   links:{
-    textDecoration:"none"
+    textDecoration:"none",
+    paddingLeft:"10px"
   },
   divider:{
     marginTop:"10px",
@@ -38,14 +39,14 @@ export default function Article(props) {
         </Typography>
         <Divider className={classes.divider}/>
         <Grid container>
-          <Grid item xs={11}>
+          <Grid item xs={9} sm={10} md={10} lg={11} xl={11}>
             <Typography component="p" className={classes.tag}>
               {props.item.tags}
             </Typography> 
           </Grid>  
-          <Grid item xs={1}>
+          <Grid item xs={3} sm={2} md={2} lg={1} xl={1}>
             <Link to={`/article/${props.item.id}`} className={classes.links} >
-              <Button variant="outlined" className={classes.button}>Open</Button>
+              <Button variant="outlined" fullWidth className={classes.button}>Open</Button>
             </Link>
           </Grid>
         </Grid>

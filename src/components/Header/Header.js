@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
   links:{
       textDecoration:"none",
-      color: "white"
+      color: "black"
   },
   
 }));
@@ -34,12 +34,11 @@ function Header(props) {
     function logout(event){
         isLogged = false;
         props.log(isLogged);
-        console.log(props.articles.Articles.isLogged);
     }
 
     return (
         <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="default">
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     <Link to="/" className={classes.links} >
