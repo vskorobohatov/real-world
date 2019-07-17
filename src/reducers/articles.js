@@ -6,6 +6,7 @@ const initialState = {
           body:"1111111",
           tags:"tag1, tag2",
           author:"123",
+          likes:10,
           comments:[
                 {
                   id:"1",
@@ -42,6 +43,14 @@ export default(state = initialState,action)=>{
              (articles.map((article,id)=>{
                 if(article.id===payload.id){
                     return {...state,articles:[...articles,articles[id]=payload]}
+                }else{
+                    return state
+                }
+            }))
+        case 'LIKE':
+             (articles.map((article,id)=>{
+                if(article.id===payload.id){
+                    return {...state,articles:[...articles,articles[id].likes=payload.likes]}
                 }else{
                     return state
                 }

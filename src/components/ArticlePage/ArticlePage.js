@@ -85,7 +85,7 @@ function ArticlePage(props) {
     function addComment(event){
       event.preventDefault();
       
-      setComment(userComment.created=getCurrentDate())
+      setComment(userComment.created = getCurrentDate())
       console.log(userComment);
 
       state.comments.push(userComment);
@@ -99,7 +99,11 @@ function ArticlePage(props) {
       let month = newDate.getMonth() + 1;
       let year = newDate.getFullYear();
       return `${date}${separator}${month<10?`0${month}`:`${month}`}${separator}${year}`
-      }
+    }
+
+    function like(data){
+      state.likes+=data;
+    }
 
     return (
         <Container maxwidth="lg">
@@ -125,7 +129,7 @@ function ArticlePage(props) {
           />
           <Grid container>
             <Grid item xs={6} sm={8} md={10} lg={10} xl={10}>
-              <Typography component="p" className={classes.tag}>
+            <Typography component="p" className={classes.tag}>
                 {article.tags}
               </Typography>
             </Grid>  
@@ -164,9 +168,9 @@ function ArticlePage(props) {
               ):(
               <Typography component="h1">
                 <b>
-                  SignIn to leave comments
+                  Sign In to leave comments
                 </b>
-            </Typography>
+              </Typography>
             )
             }
           </div>

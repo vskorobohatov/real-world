@@ -56,7 +56,7 @@ export default function FullWidthTabs() {
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="#5CB85C"
+          textColor="inherit"
           variant="fullWidth"
         >
           <Tab label="Profile" />

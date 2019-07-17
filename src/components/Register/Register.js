@@ -52,8 +52,10 @@ function Register(props) {
     isLogged:"",
     fname:"",
     lname:"",
-    email:"",
-    password:""
+    // email:"",
+    // password:"",
+    email:"test@email.com",
+    password:"123"
   });
 
   function signUp(){
@@ -83,6 +85,7 @@ function Register(props) {
                 variant="outlined"
                 required
                 fullWidth
+                value={state.fname}
                 id="firstName"
                 label="First Name"
                 autoFocus
@@ -98,6 +101,7 @@ function Register(props) {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                value={state.lname}
                 onChange={event => setState({...state, lname:event.target.value})}
               />
             </Grid>
@@ -110,6 +114,7 @@ function Register(props) {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={state.email}
                 onChange={event => setState({...state, email:event.target.value})}
               />
             </Grid>
@@ -123,6 +128,7 @@ function Register(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={state.password}
                 onChange={event => setState({...state, password:event.target.value})}
               />
             </Grid>
