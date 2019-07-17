@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from 'react-redux'
 import { log } from '../../actions/log'
 import { bindActionCreators } from 'redux';
@@ -40,15 +40,26 @@ const useStyles = makeStyles(theme => ({
   links:{
     textDecoration:'none',
     width:"100%"
-  }
+  },
 }));
 
 function Login(props) {
   const classes = useStyles();
-  let isLogged = props.articles.Articles.isLogged;
+  let isLogged = props.user.User.isLogged;
+  let email = props.user.User.email;
+  let password = props.user.User.password;
+  const [state, setState]=useState({
+    email:"",
+    password:""
+  });
   function signIn(){
-    isLogged = true;
-    props.log(isLogged);
+    if(state.email===email && state.password===password ){
+      isLogged = true;
+      props.log(isLogged);
+      props.history.push("/");
+    }else{
+      alert("Incorrect email or password!");
+    }
   }
 
   return (
@@ -69,6 +80,7 @@ function Login(props) {
             label="Email Address"
             name="email"
             autoComplete="email"
+            onChange={event => setState({...state, email:event.target.value})}
             autoFocus
           />
           <TextField
@@ -80,24 +92,23 @@ function Login(props) {
             label="Password"
             type="password"
             id="password"
+            onChange={event => setState({...state, password:event.target.value})}
             autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Link to="/" className={classes.links} >
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={signIn}
-            >
-              Sign In
-            </Button>
-          </Link>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={signIn}
+          >
+            Sign In
+          </Button>
           <Grid container justify="flex-end">
             <Grid item>
             <Link to="/register" className={classes.links} >
@@ -111,7 +122,7 @@ function Login(props) {
 }
 
 const mapStateToProps = state =>({
-  articles:state
+  user:state
 })
 
 const mapDispatchToProps =  dispatch => bindActionCreators({

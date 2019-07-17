@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +10,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
     marginBottom: theme.spacing(1),
+    border:"1px solid rgba(0, 0, 0, 0.12)",
+    borderRadius:"5px"
   },
   tag:{
     color:"grey",
@@ -23,19 +24,22 @@ const useStyles = makeStyles(theme => ({
   divider:{
     marginTop:"10px",
     marginBottom:"10px",
-  }
+  },
+  
 }));
 
 export default function Article(props) {
   const classes = useStyles();
-
+  
+  const end = 200;
+  const body = props.item.body.substring(0, end);
   return (
-      <Paper className={classes.root}>
+      <div className={classes.root}>
         <Typography variant="h5" component="h3">
           {props.item.title}
         </Typography>
         <Typography component="p">
-          {props.item.body}
+          {body}...
         </Typography>
         <Divider className={classes.divider}/>
         <Grid container>
@@ -50,6 +54,6 @@ export default function Article(props) {
             </Link>
           </Grid>
         </Grid>
-      </Paper>
+      </div>
   );
 }

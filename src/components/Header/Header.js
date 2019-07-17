@@ -13,6 +13,8 @@ import { bindActionCreators } from 'redux';
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+    maxWidth:"1280px",
+    margin:"0px auto",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -22,14 +24,30 @@ const useStyles = makeStyles(theme => ({
   },
   links:{
       textDecoration:"none",
-      color: "black"
+      color: "#5CB85C"
   },
-  
+  appBar:{
+    paddingLeft:"16px",
+    paddingRight:"16px",
+    boxShadow:"none !important",
+    color:"black",
+    backgroundColor:"white"
+  },
+  siteTitle:{
+    backgroundColor: "#5CB85C",
+    boxShadow:"inset 0 8px 8px -8px rgba(0, 0, 0, 0.3), inset 0 -8px 8px -8px rgba(0, 0, 0, 0.3)",
+    fontSize:"60px",
+    textAlign:"center",
+    padding:"50px",
+    color:"white",
+    textShadow:"0px 1px 3px rgba(0, 0, 0, 0.3)",
+    marginBottom: theme.spacing(2)
+  }
 }));
 
 function Header(props) {
     const classes = useStyles();
-    let isLogged  = props.articles.Articles.isLogged;
+    let isLogged  = props.user.User.isLogged;
 
     function logout(event){
         isLogged = false;
@@ -37,8 +55,9 @@ function Header(props) {
     }
 
     return (
+      <>
         <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     <Link to="/" className={classes.links} >
@@ -46,7 +65,14 @@ function Header(props) {
                     </Link>
                 </Typography>
                 {isLogged ? (
-                        <Button onClick={logout} color="inherit">Logout</Button>
+                  <>
+                    <Link to="/profile" className={classes.links} >
+                      <Button className={classes.links}>Profile</Button>
+                    </Link>
+                    <Link to="/" className={classes.links} >
+                      <Button onClick={logout} className={classes.links}>Logout</Button>
+                    </Link>
+                  </>    
                   ):(
                     <>
                       <Link to="/login" className={classes.links} >
@@ -60,10 +86,13 @@ function Header(props) {
             </Toolbar>
         </AppBar>
         </div>
+        <div className={classes.siteTitle}><b>Real world</b></div>
+        </>
     );
 }
 const mapStateToProps = state =>({
-    articles:state
+    articles:state,
+    user:state
   })
   
   const mapDispatchToProps =  dispatch => bindActionCreators({

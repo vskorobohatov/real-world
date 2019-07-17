@@ -1,6 +1,10 @@
+html{
+    font-family: "Titillium Web", sans-serif !important;
+    width: 100%;
+}
 body{
     padding: 0px;
     margin: 0px;
-    background-image: url('./img/bg6.jpg');
-    background-size: contain;
+    /* background-image: url('./img/bg6.jpg');
+    background-size: contain; */
 }

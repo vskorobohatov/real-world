@@ -44,7 +44,8 @@ function AddArticle(props) {
       id:Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
       title:"",
       body:"",
-      tags:[]
+      tags:[],
+      author:""
   });
   function submit(){
     props.addArticle(state);

@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from 'react-redux'
 import { log } from '../../actions/log'
+import { createUser } from '../../actions/createUser'
 import { bindActionCreators } from 'redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -38,16 +39,31 @@ const useStyles = makeStyles(theme => ({
   links:{
     textDecoration:'none',
     width:"100%"
+  },
+  label:{
+    marginBottom:theme.spacing(1),
   }
 }));
 
 function Register(props) {
   const classes = useStyles();
-  let isLogged = props.articles.Articles.isLogged;
+
+  const [state, setState] = useState({
+    isLogged:"",
+    fname:"",
+    lname:"",
+    email:"",
+    password:""
+  });
 
   function signUp(){
-    isLogged = true;
-    props.log(isLogged);
+    if(state.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) !== null && state.password !== ""){
+      props.createUser(state);
+      props.log(true);
+      props.history.push("/");
+    }else{
+      alert("Invalid email or password!")
+    }
   }
 
   return (
@@ -56,7 +72,7 @@ function Register(props) {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" className={classes.label}>
           Sign up
         </Typography>
           <Grid container spacing={2}>
@@ -70,6 +86,7 @@ function Register(props) {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                onChange={event => setState({...state, fname:event.target.value})}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -81,6 +98,7 @@ function Register(props) {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                onChange={event => setState({...state, lname:event.target.value})}
               />
             </Grid>
             <Grid item xs={12}>
@@ -92,6 +110,7 @@ function Register(props) {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={event => setState({...state, email:event.target.value})}
               />
             </Grid>
             <Grid item xs={12}>
@@ -104,21 +123,20 @@ function Register(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={event => setState({...state, password:event.target.value})}
               />
             </Grid>
           </Grid>
-          <Link to="/" className={classes.links} >
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={signUp}
-            >
-              Sign Up
-            </Button>
-          </Link>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={signUp}
+          >
+            Sign Up
+          </Button>
           <Grid container justify="flex-end">
             <Grid item>
             <Link to="/login" className={classes.links} >
@@ -132,10 +150,11 @@ function Register(props) {
 }
 
 const mapStateToProps = state =>({
-  articles:state
+  user:state
 })
 
 const mapDispatchToProps =  dispatch => bindActionCreators({
+  createUser,
   log
 },dispatch)
 

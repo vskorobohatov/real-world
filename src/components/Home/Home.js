@@ -9,11 +9,13 @@ import Article from '../Article/Article';
 import { createStructuredSelector } from 'reselect';
 import { getAllArticles } from '../../selectors/getAllArticles';
 import { getAllTags } from '../../selectors/getAllTags';
-import { getLogged } from '../../selectors/getLogged';
+import { getUser } from '../../selectors/getUser';
 
 const useStyles = makeStyles(theme => ({
   button: {
     marginBottom: theme.spacing(2),
+    border:"1px solid #5CB85C",
+    color:"#5CB85C"
   },
   input: {
     display: 'none',
@@ -22,32 +24,48 @@ const useStyles = makeStyles(theme => ({
     textDecoration:"none",
     color: "white"
   },
+  tagCol:{
+    paddingLeft:"5px !important", 
+    margin:"0px",
+  },
+  tagBlock:{
+    padding:"5px",
+  },
   tagTitle:{
     padding:"8px",
     margin:"0px"
-  }
+  },
+  tag:{
+    fontSize:"10px",
+    borderRadius:"20px",
+    marginRight:"5px"
+    
+  },
 }));
 
 function Home(props) {
   const classes = useStyles();
-  const [activeTag, setActiveTag]= useState("");
-  const articles = props.articles.filter(article => article.tags.includes(activeTag));
-  const isLogged = props.isLogged;
-  const tags = props.tags;
+  const [state, setState] = useState({
+    activeTag: "",
+    articles: "",
+    isLogged: props.user.User.isLogged,
+    tags: props.user.Articles.tags,
+  });
+  
+  state.articles = props.articles.filter(item => item.tags.includes(state.activeTag));
 
-
-  const ArticlesList = articles.map((item, id)=>{
+  const ArticlesList = state.articles.map((item, id)=>{
     return <Article item={item} key={id}/>
   });
-  const TagsList = tags.map((item, id)=>{
-    return <Button key={id} onClick={event => setActiveTag(item.name)}>{item.name}</Button>
+  const TagsList = state.tags.map((item, id)=>{
+    return <Button key={id} variant="outlined" className={classes.tag} onClick={event => setState({...state, activeTag:item.name})}>{item.name}</Button>
   });
   
     return (
       <Container>
-        {isLogged ? (
+        {state.isLogged ? (
             <Link to="/add" className={classes.links} >
-              <Button variant="outlined" color="primary" className={classes.button}>
+              <Button variant="outlined" className={classes.button}>
                 Add
               </Button>
             </Link>
@@ -55,13 +73,15 @@ function Home(props) {
             <></>
           )}
         <Grid container maxwidth="lg" spacing={3}>
-          <Grid item xs={12} sm={9} md={10} lg={10} xl={10}>
+          <Grid item xs={12} sm={9} md={9} lg={9} xl={9}>
             {ArticlesList}
           </Grid>
-          <Grid item xs={12} sm={3} md={2} lg={2} xl={2}>
+          <Grid item xs={12} sm={3} md={3} lg={3} xl={3} className={classes.tagCol}>
+            <div className={classes.tagBlock}>
             <h3 className={classes.tagTitle}>Popular tags:</h3>
               {TagsList} 
-            <Button color="secondary" onClick={event => setActiveTag("")}>Reset</Button>
+            <Button color="secondary" onClick={event => setState({...state, activeTag:""})}>Reset</Button>
+            </div>
           </Grid>
         </Grid>
       </Container>
@@ -71,7 +91,7 @@ function Home(props) {
 const mapStateToProps = createStructuredSelector({
   articles: getAllArticles,
   tags: getAllTags,
-  isLogged: getLogged
+  user: getUser
 })
 
 export default connect(mapStateToProps)(Home)
