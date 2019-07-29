@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { deleteArticle } from '../../actions/deleteArticle'
@@ -43,29 +43,65 @@ const useStyles = makeStyles(theme => ({
       }
 }));
 
+async function getApiArticle(slug){
+  return fetch('http://localhost:3000/api/articles/'+slug, {  
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    return data.article
+  });
+}
+
+async function getApiArticleComments(slug){
+  return fetch('http://localhost:3000/api/articles/'+slug+'/comments', {  
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    return data.comments
+  });
+}
+
+
 function ArticlePage(props) {
     const classes = useStyles();
-    const article = props.articles.find(item => item.id === parseInt(props.match.params.id));
+    const [state, setState] = useState({
+      article:{
+        author:{username:""}
+      },
+      comments:[]
+    });
+
     const user = props.user.User;
-    const [editMode, setEditMode] = useState({readOnly: true});
     const [editBtnText, setEditBtnText] = useState("Edit");
-    
+    const [editMode, setEditMode] = useState({readOnly: true});
     const [userComment, setComment] = useState({
-      id: article.id,
-      author:user.fname,
+      id: "",
+      author:user.username,
       body:"",
       created:"",
     });
+
+    async function updateArticle() {
+      const article = await getApiArticle(props.match.params.slug);
+      const comments = await getApiArticleComments(props.match.params.slug);
+      setState({...state, article, comments});
+    }
     
-    const [state, setState] = useState({
-      id:article.id,
-      title:article.title,
-      body:article.body,
-      tags:article.tags,
-      author:user.fname,
-      comments:article.comments,
+  
+    useEffect(() => {
+      updateArticle();
     });
-    
+
     const commentsList = state.comments.map((item, id)=>{
       return <Comment author={item.author} body={item.body} key={id} created={item.created}/>
     });
@@ -84,10 +120,7 @@ function ArticlePage(props) {
     
     function addComment(event){
       event.preventDefault();
-      
       setComment(userComment.created = getCurrentDate())
-      console.log(userComment);
-
       state.comments.push(userComment);
       props.editArticle(state);
       setComment({...userComment, body:""})
@@ -100,23 +133,19 @@ function ArticlePage(props) {
       let year = newDate.getFullYear();
       return `${date}${separator}${month<10?`0${month}`:`${month}`}${separator}${year}`
     }
-
-    function like(data){
-      state.likes+=data;
-    }
-
+    
     return (
         <Container maxwidth="lg">
           <Typography component="p" >
-          {state.title}
+          {state.article.title}
           </Typography>
           <Typography component="p" className={classes.tag}>
-            Author: {article.author}
+            Author: {state.article.author.username}
           </Typography>
           <TextField
             id="articleBody"
             label=""
-            defaultValue={state.body}
+            value={state.article.body}
             className={classes.textField}
             margin="normal"
             fullWidth
@@ -130,17 +159,17 @@ function ArticlePage(props) {
           <Grid container>
             <Grid item xs={6} sm={8} md={10} lg={10} xl={10}>
             <Typography component="p" className={classes.tag}>
-                {article.tags}
+                {state.tags}
               </Typography>
             </Grid>  
-            {(user.isLogged && user.fname === article.author) ?(
+            {(user.username === state.article.author.username) ?(
               <>
                 <Grid item xs={3} sm={2} md={1} lg={1} xl={1}>  
                     <Button variant="outlined" fullWidth className={classes.button} color="primary" onClick={editArticle}>{editBtnText}</Button>
                 </Grid>
                 <Grid item xs={3} sm={2} md={1} lg={1} xl={1}>
                   <Link to="/" className={classes.links}>
-                    <Button variant="outlined" fullWidth className={classes.button} color="secondary" onClick={event => props.deleteArticle(article.id)}>Delete</Button>
+                    <Button variant="outlined" fullWidth className={classes.button} color="secondary" onClick={event => props.deleteArticle(state.id)}>Delete</Button>
                   </Link>
                 </Grid>
               </>

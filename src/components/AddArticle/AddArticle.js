@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux'
 import { addArticle } from '../../actions/addArticle'
-import { addTag } from '../../actions/addTag'
 import { bindActionCreators } from 'redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { getUser } from '../../selectors/getUser';
+import { createStructuredSelector } from 'reselect';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -41,18 +41,27 @@ const useStyles = makeStyles(theme => ({
 function AddArticle(props) {
   const classes = useStyles();
   const [state, setState] = useState({
-      id:Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
+      token: props.user.articles.User.token,
       title:"",
       body:"",
       tags:[],
-      author:""
   });
   function submit(){
-    props.addArticle(state);
-    const tags = state.tags.split(',');
-    tags.map((item)=>{
-      return props.addTag({name:item})
-    });  
+    fetch('http://localhost:3000/api/articles', {  
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + state.token
+      },
+      body: JSON.stringify({
+        article:{
+          title: state.title,
+          body: state.body,
+          tagList: state.tags.split(',')
+        }
+      })
+    }).then(alert("Your article was added successfully"))
   }
   return (
     <Container component="main" maxWidth="md">
@@ -96,8 +105,7 @@ function AddArticle(props) {
             name="tags"
             onChange={event => setState({...state,tags:event.target.value})}
           />
-          <Link to="/" className={classes.links} >
-            <Button
+          <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -106,20 +114,22 @@ function AddArticle(props) {
             onClick={event=>{submit()}}
             >
              Add
-            </Button>
-          </Link>
+          </Button>
       </div>
     </Container>
   );
 }
 
+const mapSelectorToProps = createStructuredSelector({
+  user: getUser
+});
+
 const mapStateToProps = state =>({
-  articles:state
+  articles: state,
 })
 
 const mapDispatchToProps =  dispatch => bindActionCreators({
   addArticle,
-  addTag
 },dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddArticle)
+export default connect(mapStateToProps, mapDispatchToProps, mapSelectorToProps)(AddArticle)

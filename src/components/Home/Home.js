@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -43,22 +43,58 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+async function getApiArticles(){
+  return fetch('http://localhost:3000/api/articles', {  
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    return data.articles
+  });
+}
+async function getApiTags(){
+  return fetch('http://localhost:3000/api/tags', {  
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    return data.tags
+  });
+}
+
 function Home(props) {
   const classes = useStyles();
   const [state, setState] = useState({
     activeTag: "",
-    articles: "",
+    articles: [],
     isLogged: props.user.User.isLogged,
-    tags: props.user.Articles.tags,
+    tags: [],
   });
-  
-  state.articles = props.articles.filter(item => item.tags.includes(state.activeTag));
+
+  async function updateData() {
+    const articles = await getApiArticles();
+    const tags = await getApiTags();
+    setState({ ...state, articles, tags });
+  }
+
+  useEffect(() => {
+   updateData();
+  });
 
   const ArticlesList = state.articles.map((item, id)=>{
     return <Article item={item} key={id}/>
   });
+
   const TagsList = state.tags.map((item, id)=>{
-    return <Button key={id} variant="outlined" className={classes.tag} onClick={event => setState({...state, activeTag:item.name})}>{item.name}</Button>
+    return <Button key={id} variant="outlined" className={classes.tag} onClick={event => setState({...state, activeTag:item})}>{item}</Button>
   });
   
     return (

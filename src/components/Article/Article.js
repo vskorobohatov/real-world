@@ -45,11 +45,13 @@ export default function Article(props) {
         <Grid container>
           <Grid item xs={9} sm={10} md={10} lg={11} xl={11}>
             <Typography component="p" className={classes.tag}>
-              {props.item.tags}
+              {props.item.tagList.map((item, id)=>{
+                return <span key={id}>{item}, </span>
+              })}
             </Typography> 
           </Grid>  
           <Grid item xs={3} sm={2} md={2} lg={1} xl={1}>
-            <Link to={`/article/${props.item.id}`} className={classes.links} >
+            <Link to={`/article/${props.item.slug}`} className={classes.links} >
               <Button variant="outlined" fullWidth className={classes.button}>Open</Button>
             </Link>
           </Grid>

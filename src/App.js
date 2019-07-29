@@ -22,7 +22,7 @@ function App() {
           <Route path='/register' component={Registration}/>
           <Route path='/add' component={AddArticle}/>
           <Route path='/profile' component={Settings}/>
-          <Route path='/article/:id' component={ArticlePage}/>
+          <Route path='/article/:slug' component={ArticlePage}/>
         </Switch>
       </Router>
     </Provider>

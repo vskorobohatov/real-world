@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { connect } from 'react-redux'
 import { log } from '../../actions/log'
+import { createUser } from '../../actions/createUser'
 import { bindActionCreators } from 'redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -45,23 +46,38 @@ const useStyles = makeStyles(theme => ({
 
 function Login(props) {
   const classes = useStyles();
-  let isLogged = props.user.User.isLogged;
-  let email = props.user.User.email;
-  let password = props.user.User.password;
   const [state, setState]=useState({
-    email:"",
-    password:""
+    email:"jake@jake.jake",
+    password:"jakejake"
   });
-  function signIn(){
-    if(state.email===email && state.password===password ){
-      isLogged = true;
-      props.log(isLogged);
-      props.history.push("/");
-    }else{
-      alert("Incorrect email or password!");
-    }
+  
+
+  function getUser(){
+    fetch('http://localhost:3000/api/users/login', {  
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user:{
+          email: state.email,
+          password: state.password
+        }
+      })
+    }).then(response=>response.json()).then(response=>signIn(response))
+    .catch(err=>{
+      console.log(err.message)
+    })
   }
 
+  function signIn(response){
+    props.createUser(response.user);
+    
+    props.log(true);
+    props.history.push("/");
+  }
+  
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
@@ -80,6 +96,7 @@ function Login(props) {
             label="Email Address"
             name="email"
             autoComplete="email"
+            value={state.email}
             onChange={event => setState({...state, email:event.target.value})}
             autoFocus
           />
@@ -92,6 +109,7 @@ function Login(props) {
             label="Password"
             type="password"
             id="password"
+            value={state.password}
             onChange={event => setState({...state, password:event.target.value})}
             autoComplete="current-password"
           />
@@ -105,7 +123,7 @@ function Login(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={signIn}
+            onClick={getUser}
           >
             Sign In
           </Button>
@@ -126,6 +144,7 @@ const mapStateToProps = state =>({
 })
 
 const mapDispatchToProps =  dispatch => bindActionCreators({
+  createUser,
   log
 },dispatch)
 

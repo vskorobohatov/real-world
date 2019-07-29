@@ -36,10 +36,10 @@ function ProfileCard(props) {
   const [editBtnText, setEditBtnText] = useState("Edit");
   const [state, setState]=useState({
     isLogged:true,
-    fname:props.user.User.fname,
-    lname:props.user.User.lname,
+    token:props.user.User.token,
+    username:props.user.User.username,
+    bio:props.user.User.bio,
     email:props.user.User.email,
-    password:props.user.User.password,
   });
 
   function editUser(event){
@@ -49,10 +49,33 @@ function ProfileCard(props) {
       setEditBtnText("Save");
     }else{
       props.createUser(state);
+
+      updateUser();
+
       setEditMode({...editMode, readOnly:true});
       setEditBtnText("Edit");
     }
   }
+
+  function updateUser(){
+    fetch('http://localhost:3000/api/user', {  
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + state.token
+      },
+      body: JSON.stringify({
+        user:{
+          email: state.email,
+          username: state.username,
+          bio: state.bio,
+          
+        }
+      })
+    }).then(response => console.log(response))
+  }
+
 
   return (
     <Card className={classes.card}>
@@ -64,8 +87,8 @@ function ProfileCard(props) {
             />
             <TextField
               id="articleBody"
-              label="First name"
-              defaultValue={state.fname}
+              label="User name"
+              defaultValue={state.username}
               className={classes.textField}
               margin="normal"
               fullWidth
@@ -74,21 +97,7 @@ function ProfileCard(props) {
               InputLabelProps={{
                 className: classes.label,
               }}
-              onChange={event => setState({...state, fname:event.target.value})}
-            />
-            <TextField
-              id="articleBody"
-              label="Last name"
-              defaultValue={state.lname}
-              className={classes.textField}
-              margin="normal"
-              fullWidth
-              multiline
-              InputProps={editMode}
-              InputLabelProps={{
-                className: classes.label,
-              }}
-              onChange={event => setState({...state, lname:event.target.value})}
+              onChange={event => setState({...state, username:event.target.value})}
             />
             <TextField
               id="articleBody"
@@ -106,8 +115,8 @@ function ProfileCard(props) {
             />
             <TextField
               id="articleBody"
-              label="Password"
-              defaultValue={state.password}
+              label="Bio"
+              defaultValue={state.bio}
               className={classes.textField}
               margin="normal"
               fullWidth
@@ -116,7 +125,7 @@ function ProfileCard(props) {
               InputLabelProps={{
                 className: classes.label,
               }}
-              onChange={event => setState({...state, password:event.target.value})}
+              onChange={event => setState({...state, bio:event.target.value})}
             />
         </CardContent>
       <CardActions>

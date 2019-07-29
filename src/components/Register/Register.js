@@ -50,21 +50,38 @@ function Register(props) {
 
   const [state, setState] = useState({
     isLogged:"",
-    fname:"",
-    lname:"",
-    // email:"",
-    // password:"",
-    email:"test@email.com",
-    password:"123"
+    username:"",
+    email:"",
+    password:""
   });
+  
+  function register(){ 
+    fetch('http://localhost:3000/api/users', {  
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user:{
+          username: state.username,
+          email: state.email,
+          password: state.password
+        }
+      })
+    }).then(response=>response.json()).then(response=>signUp(response))
+  }
 
-  function signUp(){
-    if(state.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) !== null && state.password !== ""){
-      props.createUser(state);
+  function signUp(response){
+    if(response.user){
+      props.createUser(response.user);
+      console.log(response)
       props.log(true);
       props.history.push("/");
+    }else if(response.errors.username){
+      alert("Username " + response.errors.username);
     }else{
-      alert("Invalid email or password!")
+      alert("Email " + response.errors.email);
     }
   }
 
@@ -78,31 +95,18 @@ function Register(props) {
           Sign up
         </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="UserName"
                 variant="outlined"
                 required
                 fullWidth
-                value={state.fname}
-                id="firstName"
-                label="First Name"
+                value={state.username}
+                id="userName"
+                label="User Name"
                 autoFocus
-                onChange={event => setState({...state, fname:event.target.value})}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                value={state.lname}
-                onChange={event => setState({...state, lname:event.target.value})}
+                onChange={event => setState({...state, username:event.target.value})}
               />
             </Grid>
             <Grid item xs={12}>
@@ -139,7 +143,7 @@ function Register(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={signUp}
+            onClick={register}
           >
             Sign Up
           </Button>
