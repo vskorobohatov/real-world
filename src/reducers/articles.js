@@ -1,5 +1,6 @@
 const initialState = {
     articles:[],
+    tags:[]
 }
 
 export default(state = initialState,action)=>{
@@ -8,6 +9,8 @@ export default(state = initialState,action)=>{
     switch (action.type){
         case 'LOAD_ARTICLES':
             return {...state, articles:payload}
+        case 'LOAD_TAGS':
+            return {...state, tags:payload}
         case 'ADD_ARTICLE':
             return {...state,articles:[...articles,payload]}
         case 'EDIT_ARTICLE':

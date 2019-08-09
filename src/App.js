@@ -4,6 +4,7 @@ import store, {history} from './store/store'
 import { Route, Switch,Router } from 'react-router-dom';
 import Header from './components/Header/Header'
 import Home from './components/Home/Home'
+import Feed from './components/Feed/Feed'
 import Login from './components/Login/Login'
 import Registration from './components/Register/Register'
 import AddArticle from './components/AddArticle/AddArticle';
@@ -19,6 +20,7 @@ function App() {
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/login' component={Login}/>
+          <Route path='/feed' component={Feed}/>
           <Route path='/register' component={Registration}/>
           <Route path='/add' component={AddArticle}/>
           <Route path='/profile' component={Settings}/>

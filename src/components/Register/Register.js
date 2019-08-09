@@ -75,7 +75,6 @@ function Register(props) {
   function signUp(response){
     if(response.user){
       props.createUser(response.user);
-      console.log(response)
       props.log(true);
       props.history.push("/");
     }else if(response.errors.username){

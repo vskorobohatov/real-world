@@ -74,9 +74,13 @@ async function getApiArticleComments(slug){
 
 function ArticlePage(props) {
     const classes = useStyles();
+    const token = props.user.User.token;
     const [state, setState] = useState({
       article:{
-        author:{username:""}
+        body:"",
+        author:{
+          username:""
+        }
       },
       comments:[]
     });
@@ -97,10 +101,9 @@ function ArticlePage(props) {
       setState({...state, article, comments});
     }
     
-  
     useEffect(() => {
       updateArticle();
-    });
+    },[]);
 
     const commentsList = state.comments.map((item, id)=>{
       return <Comment author={item.author} body={item.body} key={id} created={item.created}/>
@@ -112,28 +115,53 @@ function ArticlePage(props) {
         setEditMode({...editMode, readOnly:false});
         setEditBtnText("Save");
       }else{
-        props.editArticle(state);
+        fetch('http://localhost:3000/api/articles/'+props.match.params.slug, {  
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          article:{
+            body: state.article.body,
+          }
+        })
+      }).then(response => response.json())
+      .then(data => {
+        //console.log(data)
+      })
         setEditMode({...editMode, readOnly:true});
         setEditBtnText("Edit");
       }
     }
     
-    function addComment(event){
-      event.preventDefault();
-      setComment(userComment.created = getCurrentDate())
-      state.comments.push(userComment);
-      props.editArticle(state);
-      setComment({...userComment, body:""})
+    function submit(){
+      fetch('http://localhost:3000/api/articles/'+props.match.params.slug+'/comments', {  
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          comment:{
+            body: userComment.body,
+          }
+        })
+      }).then(response => response.json())
+      .then(data => {
+       //console.log(data)
+      })
+      //.then(alert("Your comment was added successfully"))
     }
 
-    function getCurrentDate(separator='.'){
-      let newDate = new Date()
-      let date = newDate.getDate();
-      let month = newDate.getMonth() + 1;
-      let year = newDate.getFullYear();
-      return `${date}${separator}${month<10?`0${month}`:`${month}`}${separator}${year}`
+    function addComment(event){
+      event.preventDefault();
+      submit();
+      setComment({...userComment, body:""})
     }
-    
+   
     return (
         <Container maxwidth="lg">
           <Typography component="p" >
@@ -154,7 +182,7 @@ function ArticlePage(props) {
             InputLabelProps={{
               className: classes.label,
           }}
-            onChange={event => setState({...state, body:event.target.value})}
+            onChange={event => setState({...state,article:{...state.article,body:event.target.value}})}
           />
           <Grid container>
             <Grid item xs={6} sm={8} md={10} lg={10} xl={10}>

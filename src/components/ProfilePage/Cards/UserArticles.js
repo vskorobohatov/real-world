@@ -33,7 +33,7 @@ function UserArticlesCard(props) {
 
   useEffect(() => {
    updateData();
-  });
+  },[]);
 
 
   const ArticlesList = state.articles.map((item, id)=>{

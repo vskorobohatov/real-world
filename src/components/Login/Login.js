@@ -67,13 +67,11 @@ function Login(props) {
       })
     }).then(response=>response.json()).then(response=>signIn(response))
     .catch(err=>{
-      console.log(err.message)
     })
   }
 
   function signIn(response){
     props.createUser(response.user);
-    
     props.log(true);
     props.history.push("/");
   }

@@ -46,12 +46,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-async function getApiArticles(){
-  return fetch('http://localhost:3000/api/articles', {  
+async function getApiArticles(state){
+  return fetch('http://localhost:3000/api/articles/feed', {  
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + state.token
     }
   })
   .then(response => response.json())
@@ -73,20 +74,21 @@ async function getApiTags(){
   });
 }
 
-function Home(props) {
+function Feed(props) {
   const classes = useStyles();
   const [state, setState] = useState({
     activeTag: '',
-    articles: props.articles,
+    articles: [],
     isLogged: props.user.User.isLogged,
-    tags: []
+    tags: [],
+    token: props.user.User.token
   });
 
   async function updateData() {
-    const articles = await getApiArticles();
+    const articles = await getApiArticles(state);
     const tags = await getApiTags();
-    props.loadArticles(articles);
-    props.loadTags(tags);
+    // props.loadArticles(articles);
+    // props.loadTags(tags);
     setState({ ...state, articles, tags });
   }
 
@@ -108,15 +110,6 @@ function Home(props) {
   
     return (
       <Container>
-        {state.isLogged ? (
-            <Link to="/add" className={classes.links} >
-              <Button variant="outlined" className={classes.button}>
-                Add
-              </Button>
-            </Link>
-          ):(
-            <></>
-          )}
         <Grid container maxwidth="lg" spacing={3}>
           {state.activeTag !== '' ? (
           <Grid item xs={12} sm={9} md={9} lg={9} xl={9}>
@@ -149,4 +142,4 @@ const mapStateToProps = createStructuredSelector({
   user: getUser
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Feed)

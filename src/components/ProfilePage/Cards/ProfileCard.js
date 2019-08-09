@@ -35,11 +35,12 @@ function ProfileCard(props) {
   const [editMode, setEditMode] = useState({readOnly: true});
   const [editBtnText, setEditBtnText] = useState("Edit");
   const [state, setState]=useState({
-    isLogged:true,
+    isLogged:props.user.User.isLogged,
     token:props.user.User.token,
     username:props.user.User.username,
     bio:props.user.User.bio,
     email:props.user.User.email,
+    image:props.user.User.image
   });
 
   function editUser(event){
@@ -49,9 +50,7 @@ function ProfileCard(props) {
       setEditBtnText("Save");
     }else{
       props.createUser(state);
-
       updateUser();
-
       setEditMode({...editMode, readOnly:true});
       setEditBtnText("Edit");
     }
@@ -76,14 +75,13 @@ function ProfileCard(props) {
     }).then(response => console.log(response))
   }
 
-
   return (
     <Card className={classes.card}>
         <CardContent>
             <CardMedia
             className={classes.media}
-            image="/logo.jpg"
-            title="Contemplative Reptile"
+            image={state.image}
+            title="User image"
             />
             <TextField
               id="articleBody"

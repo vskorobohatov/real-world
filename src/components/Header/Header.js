@@ -66,6 +66,9 @@ function Header(props) {
                 </Typography>
                 {isLogged ? (
                   <>
+                    <Link to="/feed" className={classes.links} >
+                      <Button className={classes.links}>Feed</Button>
+                    </Link>
                     <Link to="/profile" className={classes.links} >
                       <Button className={classes.links}>Profile</Button>
                     </Link>
