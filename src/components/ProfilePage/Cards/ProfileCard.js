@@ -36,7 +36,7 @@ function ProfileCard(props) {
   const [editBtnText, setEditBtnText] = useState("Edit");
   const [state, setState]=useState({
     isLogged:props.user.User.isLogged,
-    token:props.user.User.token,
+    token:localStorage.getItem("token"),
     username:props.user.User.username,
     bio:props.user.User.bio,
     email:props.user.User.email,

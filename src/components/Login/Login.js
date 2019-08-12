@@ -71,6 +71,7 @@ function Login(props) {
   }
 
   function signIn(response){
+    localStorage.setItem("token", response.user.token)
     props.createUser(response.user);
     props.log(true);
     props.history.push("/");

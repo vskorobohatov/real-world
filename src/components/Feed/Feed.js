@@ -81,7 +81,7 @@ function Feed(props) {
     articles: [],
     isLogged: props.user.User.isLogged,
     tags: [],
-    token: props.user.User.token
+    token: localStorage.getItem("token")
   });
 
   async function updateData() {

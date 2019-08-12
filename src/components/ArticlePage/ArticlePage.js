@@ -74,7 +74,7 @@ async function getApiArticleComments(slug){
 
 function ArticlePage(props) {
     const classes = useStyles();
-    const token = props.user.User.token;
+    const token = localStorage.getItem("token");
     const [state, setState] = useState({
       article:{
         body:"",

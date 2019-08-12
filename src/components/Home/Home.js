@@ -108,7 +108,7 @@ function Home(props) {
   
     return (
       <Container>
-        {state.isLogged ? (
+        {localStorage.getItem("token") ? (
             <Link to="/add" className={classes.links} >
               <Button variant="outlined" className={classes.button}>
                 Add

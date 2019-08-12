@@ -74,6 +74,7 @@ function Register(props) {
 
   function signUp(response){
     if(response.user){
+      localStorage.setItem("token", response.user.token)
       props.createUser(response.user);
       props.log(true);
       props.history.push("/");

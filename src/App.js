@@ -10,6 +10,7 @@ import Registration from './components/Register/Register'
 import AddArticle from './components/AddArticle/AddArticle';
 import ArticlePage from './components/ArticlePage/ArticlePage';
 import Settings from './components/ProfilePage/ProfilePage';
+import PrivateRoute from './PrivateRoute'
 import './styles.css'
 
 function App() {
@@ -20,11 +21,12 @@ function App() {
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/login' component={Login}/>
-          <Route path='/feed' component={Feed}/>
           <Route path='/register' component={Registration}/>
-          <Route path='/add' component={AddArticle}/>
-          <Route path='/profile' component={Settings}/>
           <Route path='/article/:slug' component={ArticlePage}/>
+
+          <PrivateRoute path='/feed' component={Feed}/>
+          <PrivateRoute path='/add' component={AddArticle}/>
+          <PrivateRoute path='/profile' component={Settings}/>
         </Switch>
       </Router>
     </Provider>

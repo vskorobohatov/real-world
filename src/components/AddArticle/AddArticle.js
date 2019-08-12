@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
 function AddArticle(props) {
   const classes = useStyles();
   const [state, setState] = useState({
-      token: props.user.articles.User.token,
       title:"",
       body:"",
       tags:[],
@@ -52,7 +51,7 @@ function AddArticle(props) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + state.token
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
       },
       body: JSON.stringify({
         article:{

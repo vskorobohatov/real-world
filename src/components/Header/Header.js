@@ -51,6 +51,7 @@ function Header(props) {
 
     function logout(event){
         isLogged = false;
+        localStorage.removeItem("token")
         props.log(isLogged);
     }
 
