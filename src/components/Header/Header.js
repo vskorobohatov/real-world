@@ -47,12 +47,11 @@ const useStyles = makeStyles(theme => ({
 
 function Header(props) {
     const classes = useStyles();
-    let isLogged  = props.user.User.isLogged;
+    const isLogged  = props.user.User.isLogged;
 
     function logout(event){
-        isLogged = false;
         localStorage.removeItem("token")
-        props.log(isLogged);
+        props.log(false);
     }
 
     return (
@@ -95,7 +94,6 @@ function Header(props) {
     );
 }
 const mapStateToProps = state =>({
-    articles:state,
     user:state
   })
   

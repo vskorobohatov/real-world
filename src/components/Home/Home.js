@@ -92,6 +92,7 @@ function Home(props) {
 
   useEffect(() => {
     updateData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
   
   const filteredArticles = state.articles.filter(item => item.tagList.includes(state.activeTag));

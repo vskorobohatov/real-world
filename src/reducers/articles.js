@@ -21,6 +21,7 @@ export default(state = initialState,action)=>{
                     return state
                 }
             }))
+            break
         case 'DELETE_ARTICLE':
             return {...state,articles:articles.filter((data) => data.id !== action.payload)}
         case "REQUEST":

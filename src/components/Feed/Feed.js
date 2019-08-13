@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -94,6 +93,7 @@ function Feed(props) {
 
   useEffect(() => {
     updateData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
   
   const filteredArticles = state.articles.filter(item => item.tagList.includes(state.activeTag));

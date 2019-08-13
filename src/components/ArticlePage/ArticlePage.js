@@ -103,6 +103,7 @@ function ArticlePage(props) {
     
     useEffect(() => {
       updateArticle();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     const commentsList = state.comments.map((item, id)=>{
@@ -128,9 +129,6 @@ function ArticlePage(props) {
           }
         })
       }).then(response => response.json())
-      .then(data => {
-        //console.log(data)
-      })
         setEditMode({...editMode, readOnly:true});
         setEditBtnText("Edit");
       }
@@ -150,10 +148,6 @@ function ArticlePage(props) {
           }
         })
       }).then(response => response.json())
-      .then(data => {
-       //console.log(data)
-      })
-      //.then(alert("Your comment was added successfully"))
     }
 
     function addComment(event){
